@@ -1,34 +1,21 @@
 const TEAMS_KEY = 'fifa_teams'
 const CHAMPIONSHIP_KEY = 'fifa_championship'
+const PLAYERS_KEY = 'fifa_players'
 
 export const storage = {
   getTeams: () => {
-    try {
-      const data = localStorage.getItem(TEAMS_KEY)
-      return data ? JSON.parse(data) : []
-    } catch {
-      return []
-    }
+    try { return JSON.parse(localStorage.getItem(TEAMS_KEY)) || [] } catch { return [] }
   },
-
-  saveTeams: (teams) => {
-    localStorage.setItem(TEAMS_KEY, JSON.stringify(teams))
-  },
+  saveTeams: (teams) => localStorage.setItem(TEAMS_KEY, JSON.stringify(teams)),
 
   getChampionship: () => {
-    try {
-      const data = localStorage.getItem(CHAMPIONSHIP_KEY)
-      return data ? JSON.parse(data) : null
-    } catch {
-      return null
-    }
+    try { return JSON.parse(localStorage.getItem(CHAMPIONSHIP_KEY)) || null } catch { return null }
   },
+  saveChampionship: (c) => localStorage.setItem(CHAMPIONSHIP_KEY, JSON.stringify(c)),
+  resetChampionship: () => localStorage.removeItem(CHAMPIONSHIP_KEY),
 
-  saveChampionship: (championship) => {
-    localStorage.setItem(CHAMPIONSHIP_KEY, JSON.stringify(championship))
+  getPlayers: () => {
+    try { return JSON.parse(localStorage.getItem(PLAYERS_KEY)) || [] } catch { return [] }
   },
-
-  resetChampionship: () => {
-    localStorage.removeItem(CHAMPIONSHIP_KEY)
-  },
+  savePlayers: (players) => localStorage.setItem(PLAYERS_KEY, JSON.stringify(players)),
 }

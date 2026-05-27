@@ -9,15 +9,17 @@ export default function Chaveamento() {
   if (!championship) return <Navigate to="/sorteio" replace />;
 
   return (
-    <div className="p-6 flex flex-col gap-12 items-center">
-      <h1 className="text-white text-3xl font-bold">CHAVEAMENTO</h1>
-      <div className="w-full max-w-5xl flex flex-col gap-16">
-        <WinnerBracket wb={championship.winner_bracket} />
-        <div className="border-t border-gray-700 pt-10">
-          <LowerBracket lb={championship.lower_bracket} />
-        </div>
-        <div className="flex justify-center">
-          <GrandFinal match={championship.grand_final} />
+    <div className="py-6 flex flex-col gap-8 items-center">
+      <h1 className="text-white text-3xl font-bold px-4">CHAVEAMENTO</h1>
+      <div className="w-full overflow-x-auto pb-6">
+        <div className="min-w-[860px] flex flex-col gap-16 px-4">
+          <WinnerBracket wb={championship.winner_bracket} />
+          <div className="border-t border-gray-700 pt-10">
+            <LowerBracket lb={championship.lower_bracket} />
+          </div>
+          <div className="flex justify-center pb-4">
+            <GrandFinal match={championship.grand_final} />
+          </div>
         </div>
       </div>
     </div>

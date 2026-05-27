@@ -6,16 +6,67 @@ const ChampionshipContext = createContext(null);
 
 export function ChampionshipProvider({ children }) {
   const [teams, setTeamsState] = useState(() => storage.getTeams());
+  const [players, setPlayersState] = useState(() => storage.getPlayers());
   const [championship, setChampionshipState] = useState(() => storage.getChampionship());
+
+  const saveTeams = useCallback((t) => {
+    setTeamsState(t);
+    storage.saveTeams(t);
+  }, []);
 
   const saveChampionship = useCallback((c) => {
     setChampionshipState(c);
     storage.saveChampionship(c);
   }, []);
 
+  const addTeam = useCallback((data) => {
+    setTeamsState((prev) => {
+      const updated = [...prev, { id: crypto.randomUUID(), players: [], ...data }];
+      storage.saveTeams(updated);
+      return updated;
+    });
+  }, []);
+
+  const updateTeam = useCallback((id, data) => {
+    setTeamsState((prev) => {
+      const updated = prev.map((t) => (t.id === id ? { ...t, ...data } : t));
+      storage.saveTeams(updated);
+      return updated;
+    });
+  }, []);
+
+  const deleteTeam = useCallback((id) => {
+    setTeamsState((prev) => {
+      const updated = prev.filter((t) => t.id !== id);
+      storage.saveTeams(updated);
+      return updated;
+    });
+  }, []);
+
+  const addPlayer = useCallback((name) => {
+    setPlayersState((prev) => {
+      const updated = [...prev, { id: crypto.randomUUID(), name }];
+      storage.savePlayers(updated);
+      return updated;
+    });
+  }, []);
+
+  const deletePlayer = useCallback((id) => {
+    setPlayersState((prev) => {
+      const updated = prev.filter((p) => p.id !== id);
+      storage.savePlayers(updated);
+      return updated;
+    });
+  }, []);
+
   const startChampionship = useCallback((newChampionship) => {
     saveChampionship(newChampionship);
   }, [saveChampionship]);
+
+  const resetChampionship = useCallback(() => {
+    storage.resetChampionship();
+    setChampionshipState(null);
+  }, []);
 
   const submitScore = useCallback((matchId, score1, score2, penaltyWinner = null) => {
     if (!championship) return;
@@ -29,8 +80,16 @@ export function ChampionshipProvider({ children }) {
   return (
     <ChampionshipContext.Provider value={{
       teams,
+      players,
       championship,
+      saveTeams,
+      addTeam,
+      updateTeam,
+      deleteTeam,
+      addPlayer,
+      deletePlayer,
       startChampionship,
+      resetChampionship,
       submitScore,
     }}>
       {children}
@@ -38,7 +97,6 @@ export function ChampionshipProvider({ children }) {
   );
 }
 
-// ESTA É A ÚNICA VEZ QUE ESSA FUNÇÃO DEVE APARECER NO ARQUIVO
 export function useChampionship() {
   const ctx = useContext(ChampionshipContext);
   if (!ctx) throw new Error('useChampionship must be used within ChampionshipProvider');
