@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(cp -r /Users/victorsalazar/fifa-championship-app/. /Users/victorsalazar/fifa-championship/)",
+      "Bash(rm -rf /Users/victorsalazar/fifa-championship-app)",
+      "Bash(npm install *)",
+      "Bash(npx tailwindcss *)"
+    ]
+  }
+}
